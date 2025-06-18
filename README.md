@@ -13,15 +13,18 @@
 ## 📦 專案結構
 
 ```
-├── index.html              # 主網頁入口
+├── index.html              # 主網頁入口 (含聯絡人加入功能防呆)
 ├── contact.vcf             # vCard 聯絡人檔案 (需自訂)
+├── nfc-generator.html      # NFC 內容產生工具
 ├── assets/
 │   ├── photo.jpg           # 個人頭像 (已優化)
 │   ├── moda-logo.svg       # MODA 官方標誌
 │   └── COPYRIGHT.txt       # 版權聲明文件
+├── CLAUDE.md               # Claude Code 專案指引
 ├── NFC-GUIDE.md            # NFC 設定使用指南
 ├── PHOTO-GUIDE.md          # 大頭貼優化指南
 ├── VCARD-GUIDE.md          # vCard 編碼相容性指南
+├── LICENSE                 # 授權條款
 └── README.md               # 專案說明文件
 ```
 
