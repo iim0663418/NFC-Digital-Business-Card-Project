@@ -1,0 +1,55 @@
+{
+  "name": "digital-business-cards-frontend",
+  "version": "1.0.0",
+  "description": "Frontend Admin Panel for Digital Business Cards Management System",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
+  },
+  "keywords": ["digital-business-cards", "admin-panel", "react"],
+  "author": "Digital Business Cards Team",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "5.0.1",
+    "axios": "^1.4.0",
+    "antd": "^5.6.1",
+    "@ant-design/icons": "^5.1.4",
+    "styled-components": "^6.0.2",
+    "react-query": "^3.39.3",
+    "react-hook-form": "^7.44.3",
+    "react-dropzone": "^14.2.3",
+    "papaparse": "^5.4.1",
+    "file-saver": "^2.0.5",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "@types/node": "^20.3.1",
+    "eslint": "^8.42.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:3000"
+}

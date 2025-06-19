@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 資料庫服務
+  db:
+    image: postgres:15-alpine
+    container_name: digital_cards_db
+    environment:
+      POSTGRES_DB: digital_business_cards
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secure_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d digital_business_cards"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Node.js 後端 API 服務
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: digital_cards_backend
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: digital_business_cards
+      DB_USER: app_user
+      DB_PASSWORD: ${DB_PASSWORD:-secure_password_2024}
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_here}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GITHUB_REPO_URL: ${GITHUB_REPO_URL:-}
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_storage:/app/uploads
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # React 前端管理介面服務
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: digital_cards_frontend
+    environment:
+      REACT_APP_API_URL: ${API_URL:-http://localhost:3000}
+      NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Nginx 反向代理 (生產環境使用)
+  nginx:
+    image: nginx:alpine
+    container_name: digital_cards_nginx
+    ports:
+      - "${NGINX_PORT:-80}:80"
+      - "${NGINX_SSL_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app_network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  # 資料庫持久化儲存
+  db_data:
+    driver: local
+    
+  # 上傳檔案持久化儲存
+  uploads_storage:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
+
+# 開發環境快速啟動配置
+# 使用: docker-compose --profile development up
