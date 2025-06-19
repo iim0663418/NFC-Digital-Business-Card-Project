@@ -19,9 +19,9 @@
     ],
     "socialLinks": {
       "email": "mailto:chen.daming@example.com",
-      "linkedin": "https://www.linkedin.com/in/chen-da-ming",
+      "line": "https://line.me/ti/p/YOUR_LINE_ID",
       "github": "https://github.com/chendaming",
-      "nfcTool": "nfc-generator.html"
+      "social": "https://instagram.com/your_instagram"
     }
   }
 }
